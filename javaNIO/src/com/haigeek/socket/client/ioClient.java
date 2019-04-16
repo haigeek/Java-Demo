@@ -23,7 +23,9 @@ public class ioClient {
 
     public String sendMessage(String msg) throws IOException {
         out.println(msg);
+        out.flush();
         String resp = in.readLine();
+        System.out.println(resp);
         return resp;
     }
 
@@ -35,8 +37,9 @@ public class ioClient {
 
     public static void main(String[] args) throws IOException {
         ioClient ioClient = new ioClient();
-        ioClient.startConnection("127.0.0.1", 8080);
+        ioClient.startConnection("127.0.0.1", 8081);
         ioClient.sendMessage("hello server");
+        ioClient.stopConnection();
     }
 }
 
