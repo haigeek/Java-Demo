@@ -38,7 +38,7 @@ public class ioClient {
     public static void main(String[] args) throws IOException {
         ioClient ioClient = new ioClient();
         ioClient.startConnection("127.0.0.1", 8081);
-        ioClient.sendMessage("hello server");
+        ioClient.sendMessage("hello demo");
         ioClient.stopConnection();
     }
 }

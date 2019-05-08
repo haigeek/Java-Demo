@@ -15,7 +15,7 @@ import java.util.Set;
  * @date 2019/4/16 下午9:58
  */
 public class NioServer {
-    private Selector selector;//创建一个选择器
+    private Selector selector;
     private final static int port = 8686;
     private final static int BUF_SIZE = 10240;
     private void initServer() throws IOException{
@@ -29,8 +29,10 @@ public class NioServer {
         //将上述的通道管理器和通道绑定，并为该通道注册OP_ACCEPT事件
         //注册事件后，当该事件到达时，selector.select()会返回（一个key），如果该事件没到达selector.select()会一直阻塞
         SelectionKey selectionKey=channel.register(selector,SelectionKey.OP_ACCEPT);
+
         while (true){
-            selector.select();//这是一个阻塞方法，一直等待直到有数据可读，返回值是key的数量（可以有多个）
+            //这是一个阻塞方法，一直等待直到有数据可读，返回值是key的数量（可以有多个）
+            selector.select();
             Set keys=selector.selectedKeys();
             Iterator iterator=keys.iterator();
             while (iterator.hasNext()){
@@ -69,19 +71,23 @@ public class NioServer {
             byteBuffer.clear();
             bytesRead = clientChannel.read(byteBuffer);
         }
-        if (bytesRead==-1){
-            clientChannel.close();
-        }
+        clientChannel.register(key.selector(),SelectionKey.OP_WRITE);
+        //为了和客户端保持通信，所以注册写事件，是为了给客户端发欢迎信息
+//        if (bytesRead==-1){
+//            clientChannel.close();
+//        }
     }
 
     public void doWrite(SelectionKey key) throws IOException {
+        String info = "客户端你好!!";
         ByteBuffer byteBuffer = ByteBuffer.allocate(BUF_SIZE);
-        byteBuffer.flip();
         SocketChannel clientChannel = (SocketChannel) key.channel();
-        while (byteBuffer.hasRemaining()){
-            clientChannel.write(byteBuffer);
-        }
-        byteBuffer.compact();
+        byteBuffer.clear();
+        byteBuffer.put(info.getBytes("UTF-8"));
+        byteBuffer.flip();
+        clientChannel.write(byteBuffer);
+        clientChannel.register(key.selector(),SelectionKey.OP_READ);
+        clientChannel.close();
     }
 
     public static void main(String[] args) throws IOException {

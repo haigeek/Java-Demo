@@ -13,7 +13,7 @@ import java.util.Iterator;
  * @date 2019/4/16 下午10:22
  */
 public class NioClient {
-    private Selector selector;          //创建一个选择器
+    private Selector selector;
     private final static int port = 8686;
     private final static int BUF_SIZE = 10240;
     private static ByteBuffer byteBuffer = ByteBuffer.allocate(BUF_SIZE);
@@ -25,6 +25,7 @@ public class NioClient {
         clientChannel.connect(new InetSocketAddress(port));
         clientChannel.register(selector, SelectionKey.OP_CONNECT);
         while (true){
+            //这是一个阻塞方法，一直等待直到有数据可读，返回值是key的数量（可以有多个）
             selector.select();
             Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
             while (iterator.hasNext()){
@@ -51,17 +52,23 @@ public class NioClient {
         byteBuffer.flip();
         clientChannel.write(byteBuffer);
         clientChannel.register(key.selector(),SelectionKey.OP_READ);
-        clientChannel.close();
+        //为了和服务端保持通信，所以注册读事件，是为了接受服务端返回的信息
+        //clientChannel.close();
     }
 
     public void doRead(SelectionKey key) throws IOException {
         SocketChannel clientChannel = (SocketChannel) key.channel();
-        clientChannel.read(byteBuffer);
-        byte[] data = byteBuffer.array();
-        String msg = new String(data).trim();
-        System.out.println("服务端发送消息："+msg);
-        clientChannel.close();
-        key.selector().close();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(BUF_SIZE);
+        long bytesRead = clientChannel.read(byteBuffer);
+        while (bytesRead>0){
+            byteBuffer.flip();
+            byte[] data = byteBuffer.array();
+            String info = new String(data).trim();
+            System.out.println("从服务端发送过来的消息是："+info);
+            byteBuffer.clear();
+            bytesRead = clientChannel.read(byteBuffer);
+        }
+        clientChannel.register(key.selector(),SelectionKey.OP_WRITE);
     }
 
     public static void main(String[] args) throws IOException {
