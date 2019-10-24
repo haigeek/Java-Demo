@@ -28,16 +28,13 @@ public class lambda {
         names.stream().forEach(System.out::println);
     }
 
-
-
-
     //方法和构造函数引用
     public static void method(){
 
     }
     public static void main(String[] args){
+        
         sort();
-
 
     }
 }

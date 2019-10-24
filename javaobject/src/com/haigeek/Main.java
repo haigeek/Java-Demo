@@ -8,5 +8,6 @@ public class Main {
 	// write your code here
     Cat cat=new Cat();
     cat.eat();
+        System.out.println("hello");
     }
 }

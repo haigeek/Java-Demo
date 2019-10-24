@@ -1,6 +1,4 @@
 package com.haigeek.netty.socket.server;
-
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
