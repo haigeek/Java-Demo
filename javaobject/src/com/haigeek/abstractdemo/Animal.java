@@ -3,19 +3,15 @@ package com.haigeek.abstractdemo;
 /**
  * @author zhaohj
  * @date 2019/1/18 上午9:56
+ * 抽象类是对属性的抽象，例如动物都需要eat和sleep
  */
 public abstract class Animal {
 
     /**
-     * cat的抽象方法,在子类必须实现
-     */
-    public abstract void cat();
-
-    /**
-     * dog的抽象方法
+     * sleep的抽象方法
      */
 
-    public abstract void dog();
+    public abstract void sleep();
 
     /**
      * 抽象类可以实现方法
