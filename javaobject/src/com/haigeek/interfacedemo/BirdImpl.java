@@ -9,4 +9,9 @@ public class BirdImpl implements Bird {
     public void fly() {
         System.out.println("fly is extend by interface FlyAnimal");
     }
+
+    @Override
+    public void otherAction() {
+
+    }
 }
