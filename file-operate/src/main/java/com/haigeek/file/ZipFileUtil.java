@@ -46,4 +46,14 @@ public class ZipFileUtil {
         zipFile.addFiles(originFiles, zipParameters);
     }
 
+    public void compressFolderWithPass(String compressFilePath,String passWord,File originFolder ) throws ZipException {
+        ZipParameters zipParameters = new ZipParameters();
+        zipParameters.setEncryptFiles(true);
+        zipParameters.setEncryptionMethod(EncryptionMethod.AES);
+        // Below line is optional. AES 256 is used by default. You can override it to use AES 128. AES 192 is supported only for extracting.
+        zipParameters.setAesKeyStrength(AesKeyStrength.KEY_STRENGTH_256);
+        ZipFile zipFile = new ZipFile(compressFilePath, passWord.toCharArray());
+        zipFile.addFolder(originFolder, zipParameters);
+    }
+
 }
