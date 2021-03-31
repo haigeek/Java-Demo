@@ -15,9 +15,15 @@ import java.util.Set;
  * @date 2019/4/16 下午9:58
  */
 public class NioServer {
-    private Selector selector;
     private final static int port = 8686;
     private final static int BUF_SIZE = 10240;
+    private Selector selector;
+
+    public static void main(String[] args) throws IOException {
+        NioServer nioServer = new NioServer();
+        nioServer.initServer();
+    }
+
     private void initServer() throws IOException{
         //创建通道管理器对象selector
         this.selector=Selector.open();
@@ -51,6 +57,7 @@ public class NioServer {
         }
 
     }
+
     public void doAccept(SelectionKey key) throws IOException {
         ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
         System.out.println("ServerSocketChannel正在循环监听");
@@ -88,10 +95,5 @@ public class NioServer {
         clientChannel.write(byteBuffer);
         clientChannel.register(key.selector(),SelectionKey.OP_READ);
         clientChannel.close();
-    }
-
-    public static void main(String[] args) throws IOException {
-        NioServer nioServer = new NioServer();
-        nioServer.initServer();
     }
 }

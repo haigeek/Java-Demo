@@ -14,6 +14,11 @@ public class ioServer{
     private PrintWriter out;
     private BufferedReader in;
 
+    public static void main(String[] args) throws IOException {
+        ioServer server=new ioServer();
+        server.start(8080);
+    }
+
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         clientSocket = serverSocket.accept();
@@ -31,9 +36,5 @@ public class ioServer{
         out.close();
         clientSocket.close();
         serverSocket.close();
-    }
-    public static void main(String[] args) throws IOException {
-        ioServer server=new ioServer();
-        server.start(8080);
     }
 }

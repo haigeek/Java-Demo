@@ -13,10 +13,15 @@ import java.util.Iterator;
  * @date 2019/4/16 下午10:22
  */
 public class NioClient {
-    private Selector selector;
     private final static int port = 8686;
     private final static int BUF_SIZE = 10240;
     private static ByteBuffer byteBuffer = ByteBuffer.allocate(BUF_SIZE);
+    private Selector selector;
+
+    public static void main(String[] args) throws IOException {
+        NioClient myNioClient = new NioClient();
+        myNioClient.initClient();
+    }
 
     private void  initClient() throws IOException {
         this.selector = Selector.open();
@@ -69,10 +74,5 @@ public class NioClient {
             bytesRead = clientChannel.read(byteBuffer);
         }
         clientChannel.register(key.selector(),SelectionKey.OP_WRITE);
-    }
-
-    public static void main(String[] args) throws IOException {
-        NioClient myNioClient = new NioClient();
-        myNioClient.initClient();
     }
 }

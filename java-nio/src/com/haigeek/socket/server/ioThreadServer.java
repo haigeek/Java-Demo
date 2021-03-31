@@ -16,6 +16,18 @@ import java.util.concurrent.Executors;
 public class ioThreadServer {
     //线程池
     private static ExecutorService executorService= Executors.newCachedThreadPool();
+
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket=new ServerSocket(8081);
+        Socket client=null;
+        while (true){
+            client= serverSocket.accept();
+            System.out.println(client.getRemoteSocketAddress()+"客户端连接成功");
+            //放入线程池进行处理
+            executorService.submit(new HandleMsg(client));
+        }
+    }
+
     private static class HandleMsg implements Runnable{
 
         Socket client;
@@ -50,17 +62,6 @@ public class ioThreadServer {
                 }
             }
 
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket=new ServerSocket(8081);
-        Socket client=null;
-        while (true){
-            client= serverSocket.accept();
-            System.out.println(client.getRemoteSocketAddress()+"客户端连接成功");
-            //放入线程池进行处理
-            executorService.submit(new HandleMsg(client));
         }
     }
 }

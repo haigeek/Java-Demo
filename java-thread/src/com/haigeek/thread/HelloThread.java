@@ -24,8 +24,6 @@ public class HelloThread extends Thread {
         System.out.println("thread state："+Thread.currentThread().getState());
         //主进程的辅助进程，主要负责线程执行之后的垃圾回收
         System.out.println("thread state："+Thread.currentThread().isDaemon());
-
-
         System.out.println("hello");
     }
 }

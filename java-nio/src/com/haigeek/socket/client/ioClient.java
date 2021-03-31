@@ -15,6 +15,13 @@ public class ioClient {
     private PrintWriter out;
     private BufferedReader in;
 
+    public static void main(String[] args) throws IOException {
+        ioClient ioClient = new ioClient();
+        ioClient.startConnection("127.0.0.1", 8081);
+        ioClient.sendMessage("hello demo");
+        ioClient.stopConnection();
+    }
+
     public void startConnection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);
         out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -33,13 +40,6 @@ public class ioClient {
         in.close();
         out.close();
         clientSocket.close();
-    }
-
-    public static void main(String[] args) throws IOException {
-        ioClient ioClient = new ioClient();
-        ioClient.startConnection("127.0.0.1", 8081);
-        ioClient.sendMessage("hello demo");
-        ioClient.stopConnection();
     }
 }
 
